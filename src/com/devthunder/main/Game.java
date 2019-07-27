@@ -2,8 +2,8 @@ package com.devthunder.main;
 
 import com.devthunder.entities.Entity;
 import com.devthunder.entities.Player;
-import com.devthunder.graficos.Spritesheet;
-import com.devthunder.graficos.UI;
+import com.devthunder.graphics.Spritesheet;
+import com.devthunder.graphics.UI;
 import com.devthunder.world.World;
 
 import javax.swing.*;
@@ -21,9 +21,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public static JFrame frame;
     private Thread thread;
     private boolean isRunning = true;
-    public static final int WIDTH = 340;
-    public static final int HEIGHT = 240;
-    public static final int SCALE = 2;
+    public static final int WIDTH = 240;
+    public static final int HEIGHT = 160;
+    public static final int SCALE = 3;
 
     private BufferedImage image;
 
@@ -32,7 +32,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     public static World world;
     public static Player player;
 
-    public static final int SPRITE_SIZE = 32;
+    public static final int SPRITE_SIZE = 16;
 
     public UI ui;
 
@@ -46,7 +46,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
         // Initializing objects.
         spritesheet = new Spritesheet("/spritesheet.png");
-        player = new Player(0, 0, SPRITE_SIZE, SPRITE_SIZE, 1.7, spritesheet.getSprite(2 * SPRITE_SIZE, 0, SPRITE_SIZE, SPRITE_SIZE));
+        player = new Player(0, 0, SPRITE_SIZE, SPRITE_SIZE, 1.4, Entity.PLAYER_SPRITE_RIGHT);
         world = new World("/level1.png");
         ui = new UI();
         entities = new ArrayList<Entity>();
@@ -55,7 +55,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     }
 
     public void initFrame() {
-        frame = new JFrame("Pac-Man");
+        frame = new JFrame("Super Mario");
         frame.add(this);
         frame.setResizable(false);
         frame.pack();
@@ -99,7 +99,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
             return;
         }
         Graphics g = image.getGraphics();
-        g.setColor(new Color(0, 0, 0));
+        g.setColor(new Color(99, 155, 255));
         g.fillRect(0, 0, WIDTH, HEIGHT);
 
         // World render
@@ -155,15 +155,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
                 e.getKeyCode() == KeyEvent.VK_A) {
             player.left = true;
         }
-
-        if (e.getKeyCode() == KeyEvent.VK_UP ||
-                e.getKeyCode() == KeyEvent.VK_W) {
-            player.up = true;
-
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN ||
-                e.getKeyCode() == KeyEvent.VK_S) {
-            player.down = true;
-        }
     }
 
     @Override
@@ -175,15 +166,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
                 e.getKeyCode() == KeyEvent.VK_A) {
             player.left = false;
         }
-
-        if (e.getKeyCode() == KeyEvent.VK_UP ||
-                e.getKeyCode() == KeyEvent.VK_W) {
-            player.up = false;
-        } else if (e.getKeyCode() == KeyEvent.VK_DOWN ||
-                e.getKeyCode() == KeyEvent.VK_S) {
-            player.down = false;
-        }
-
     }
 
     @Override

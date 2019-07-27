@@ -23,20 +23,15 @@ public class World {
             map.getRGB(0, 0, map.getWidth(), map.getHeight(), pixels, 0, map.getWidth());
             for (int xx = 0; xx < map.getWidth(); xx++) {
                 for (int yy = 0; yy < map.getHeight(); yy++) {
-                    int pixelAtual = pixels[xx + (yy * map.getWidth())];
-                    tiles[xx + (yy * WIDTH)] = new FloorTile(xx * 32, yy * 32, Tile.TILE_FLOOR);
-                    if (pixelAtual == 0xFF000000) {
-                        //Floor
-                        tiles[xx + (yy * WIDTH)] = new FloorTile(xx * 32, yy * 32, Tile.TILE_FLOOR);
-                    } else if (pixelAtual == 0xFFFFFFFF) {
-                        //Wall
-                        tiles[xx + (yy * WIDTH)] = new WallTile(xx * 32, yy * 32, Tile.TILE_WALL);
-                    } else if (pixelAtual == 0xFF0026FF) {
-                        //Player
-                        Game.player.setX(xx * 16);
-                        Game.player.setY(yy * 16);
-                    } else if (pixelAtual == 0xFFFF0000) {
-                        //Instanciar inimigo e adicionar a lista das entities
+                    int actualPixel = pixels[xx + (yy * map.getWidth())];
+                    tiles[xx + (yy * WIDTH)] = new FloorTile(xx * Game.SPRITE_SIZE, yy * Game.SPRITE_SIZE, Tile.TILE_FLOOR);
+                    if (actualPixel == 0xFF000000) {
+                        tiles[xx + (yy * WIDTH)] = new FloorTile(xx * Game.SPRITE_SIZE, yy * Game.SPRITE_SIZE, Tile.TILE_FLOOR);
+                    } else if (actualPixel == 0xFFffffff) {
+                        tiles[xx + (yy * WIDTH)] = new WallTile(xx * Game.SPRITE_SIZE, yy * Game.SPRITE_SIZE, Tile.TILE_WALL);
+                    } else if (actualPixel == 0xFF0000ff) { // Player
+                        Game.player.setX(xx * Game.SPRITE_SIZE);
+                        Game.player.setY(yy * Game.SPRITE_SIZE);
                     }
                 }
             }
@@ -66,7 +61,7 @@ public class World {
     }
 
     public static void restartGame(String level) {
-        new Game();
+        // TODO: Reset game logic
         return;
     }
 
