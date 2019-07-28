@@ -25,6 +25,7 @@ public class Player extends Entity {
 
     public boolean jump = false;
     public boolean onJumping = false;
+    private boolean takeDamageOnEnemy = false;
 
     private BufferedImage[] rightPlayer, leftPlayer;
 
@@ -53,13 +54,14 @@ public class Player extends Entity {
 
         if (jump) {
             onJumping = true;
-            // TODO: Fix collision
-            checkEnemyCollision();
         }
+
+        // TODO: Fix collision
+        checkEnemyCollision();
 
         // REAL JUMP ALGORITHM
         vspd += gravity;
-        if (!World.isFree((int) x, (int) (y + 1)) && jump) {
+        if ((!World.isFree((int) x, (int) (y + 1)) || takeDamageOnEnemy) && jump) {
             vspd = -6;
             jump = false;
         }
@@ -114,6 +116,7 @@ public class Player extends Entity {
             if (e instanceof Enemy) {
                 if (Entity.isColidding(this, e)) {
                     jump = true;
+                    takeDamageOnEnemy = true;
                     ((Enemy) e).life--;
                 }
             }

@@ -51,7 +51,7 @@ public class Enemy extends Entity {
             }
         }
 
-        checkPlayerCollision();
+//        checkPlayerCollision();
     }
 
     public void checkPlayerCollision() {
