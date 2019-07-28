@@ -115,9 +115,11 @@ public class Player extends Entity {
             Entity e = Game.entities.get(i);
             if (e instanceof Enemy) {
                 if (Entity.isColidding(this, e)) {
-                    jump = true;
-                    takeDamageOnEnemy = true;
-                    ((Enemy) e).life--;
+                    if (getY() < e.getY()) {
+                        jump = true;
+                        takeDamageOnEnemy = true;
+                        ((Enemy) e).life--;
+                    }
                 }
             }
         }

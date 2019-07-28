@@ -67,7 +67,7 @@ public class World {
 
         int x4 = (xnext + TILE_SIZE - 1) / TILE_SIZE;
         int y4 = (ynext + TILE_SIZE - 1) / TILE_SIZE;
-        
+
         boolean outOfWorld = x1 + (y1 * World.WIDTH) <= 0;
 
         return !(outOfWorld ||
