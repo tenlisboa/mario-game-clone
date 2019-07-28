@@ -46,7 +46,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
         // Initializing objects.
         spritesheet = new Spritesheet("/spritesheet.png");
-        player = new Player(0, 0, SPRITE_SIZE, SPRITE_SIZE, 1.4, Entity.PLAYER_SPRITE_RIGHT);
+        player = new Player(0, 0, SPRITE_SIZE, SPRITE_SIZE, 1, null);
         world = new World("/level1.png");
         ui = new UI();
         entities = new ArrayList<Entity>();
@@ -165,6 +165,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT ||
                 e.getKeyCode() == KeyEvent.VK_A) {
             player.left = false;
+        }
+
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            player.jump = true;
         }
     }
 
