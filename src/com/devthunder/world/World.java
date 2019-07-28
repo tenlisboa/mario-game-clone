@@ -29,6 +29,9 @@ public class World {
                         tiles[xx + (yy * WIDTH)] = new FloorTile(xx * Game.SPRITE_SIZE, yy * Game.SPRITE_SIZE, Tile.TILE_FLOOR);
                     } else if (actualPixel == 0xFFffffff) {
                         tiles[xx + (yy * WIDTH)] = new WallTile(xx * Game.SPRITE_SIZE, yy * Game.SPRITE_SIZE, Tile.TILE_WALL);
+                        if (yy - 1 >= 0 && pixels[xx + ((yy - 1) * map.getWidth())] == 0xFFffffff) {
+                            tiles[xx + (yy * WIDTH)] = new WallTile(xx * Game.SPRITE_SIZE, yy * Game.SPRITE_SIZE, Tile.TILE_WALL_PLAIN);
+                        }
                     } else if (actualPixel == 0xFF0000ff) { // Player
                         Game.player.setX(xx * Game.SPRITE_SIZE);
                         Game.player.setY(yy * Game.SPRITE_SIZE);

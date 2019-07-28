@@ -106,6 +106,8 @@ public class Player extends Entity {
                 jump = false;
             }
         }
+
+        updateCamera();
     }
 
     @Override

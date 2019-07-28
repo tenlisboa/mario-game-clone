@@ -57,8 +57,8 @@ public class Entity {
 
 
     public void updateCamera() {
-        Camera.x = Camera.clamp(getX() - (Game.WIDTH / 2), 0, World.WIDTH * 32 - Game.WIDTH);
-        Camera.y = Camera.clamp(getY() - (Game.HEIGHT / 2), 0, World.HEIGHT * 32 - Game.HEIGHT);
+        Camera.x = Camera.clamp(getX() - (Game.WIDTH / 2), 0, World.WIDTH * Game.SPRITE_SIZE - Game.WIDTH);
+        Camera.y = Camera.clamp(getY() - (Game.HEIGHT / 2), 0, World.HEIGHT * Game.SPRITE_SIZE - Game.HEIGHT);
     }
 
     public void setX(int newX) {
