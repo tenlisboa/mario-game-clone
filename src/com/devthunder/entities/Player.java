@@ -46,6 +46,7 @@ public class Player extends Entity {
         if (World.isFree((int) x, (int) (y + gravity)) && !isJumping) {
             isDown = true;
             y += gravity;
+            checkEnemyCollision();
         } else {
             isDown = false;
         }
@@ -109,6 +110,19 @@ public class Player extends Entity {
 
         updateCamera();
     }
+
+    public void checkEnemyCollision() {
+        for (int i = 0; i < Game.entities.size(); i++) {
+            Entity e = Game.entities.get(i);
+            if (e instanceof Enemy) {
+                if (Entity.isColidding(this, e)) {
+                    isJumping = true;
+                    ((Enemy) e).life--;
+                }
+            }
+        }
+    }
+
 
     @Override
     public void render(Graphics g) {

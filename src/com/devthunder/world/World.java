@@ -1,5 +1,7 @@
 package com.devthunder.world;
 
+import com.devthunder.entities.Enemy;
+import com.devthunder.entities.Entity;
 import com.devthunder.main.Game;
 
 import javax.imageio.ImageIO;
@@ -35,6 +37,9 @@ public class World {
                     } else if (actualPixel == 0xFF0000ff) { // Player
                         Game.player.setX(xx * Game.SPRITE_SIZE);
                         Game.player.setY(yy * Game.SPRITE_SIZE);
+                    } else if (actualPixel == 0xFFff0000) { // Enemy
+                        Enemy enemy = new Enemy(xx * Game.SPRITE_SIZE, yy * Game.SPRITE_SIZE, Game.SPRITE_SIZE, Game.SPRITE_SIZE, 0.7, Entity.ENEMY);
+                        Game.entities.add(enemy);
                     }
                 }
             }

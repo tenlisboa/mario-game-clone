@@ -1,45 +1,54 @@
 package com.devthunder.entities;
 
-import java.awt.Graphics;
+import com.devthunder.main.Game;
+import com.devthunder.world.World;
+
 import java.awt.image.BufferedImage;
 
 
+public class Enemy extends Entity {
 
-public class Enemy extends Entity{
+    public boolean right = true, left = false;
 
+    public int life = 3;
 
-    public Enemy(int x, int y, int width, int height,int speed, BufferedImage sprite) {
-        super(x, y, width, height,speed,sprite);
+    public Enemy(int x, int y, int width, int height, double speed, BufferedImage sprite) {
+        super(x, y, width, height, speed, sprite);
     }
 
-    public void tick(){
-        depth = 0;
-		/*
-		if(path == null || path.size() == 0) {
-				Vector2i start = new Vector2i(((int)(x/16)),((int)(y/16)));
-				Vector2i end = new Vector2i(((int)(Game.player.x/16)),((int)(Game.player.y/16)));
-				path = AStar.findPath(Game.world, start, end);
-			}
+    @Override
+    public void tick() {
+        if (World.isFree((int) x, (int) (y + 1))) {
+            y += 1;
+        }
 
-			if(new Random().nextInt(100) < 50)
-				followPath(path);
+        if (life <= 0) {
+            Game.entities.remove(this);
+            return;
+        }
 
-			if(x % 16 == 0 && y % 16 == 0) {
-				if(new Random().nextInt(100) < 10) {
-					Vector2i start = new Vector2i(((int)(x/16)),((int)(y/16)));
-					Vector2i end = new Vector2i(((int)(Game.player.x/16)),((int)(Game.player.y/16)));
-					path = AStar.findPath(Game.world, start, end);
-				}
-			}
-			*/
-
+        if (right) {
+            if (World.isFree((int) (x + speed), getY())) {
+                x += speed;
+                if (World.isFree((int) (x + Game.SPRITE_SIZE), (int) y + 1)) {
+                    right = false;
+                    left = true;
+                }
+            } else {
+                right = false;
+                left = true;
+            }
+        } else if (left) {
+            if (World.isFree((int) (x - speed), getY())) {
+                x -= speed;
+                if (World.isFree((int) (x - Game.SPRITE_SIZE), (int) y + 1)) {
+                    right = true;
+                    left = false;
+                }
+            } else {
+                right = true;
+                left = false;
+            }
+        }
     }
-
-
-
-    public void render(Graphics g) {
-
-    }
-
-
 }
