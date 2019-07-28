@@ -17,16 +17,14 @@ public class Player extends Entity {
     public int currentCoins = 0;
     public int maxCoins = 0;
 
-    private double gravity = 2;
+    private double gravity = 0.3;
+    private double vspd = 0;
 
     private int frames, maxFrames = 7, index = 0, maxIndex = 2;
     private boolean moved = false;
 
     public boolean jump = false;
-    public int jumpHeight = 40;
-    public int jumpFrames = 0;
-    public boolean isJumping = false;
-    private boolean isDown = false;
+    public boolean onJumping = false;
 
     private BufferedImage[] rightPlayer, leftPlayer;
 
@@ -46,36 +44,53 @@ public class Player extends Entity {
 
     @Override
     public void tick() {
-        depth = 1;
+        depth = 2;
         moved = false;
 
         if (life <= 0) {
             World.restartGame("/level1.png");
         }
 
-        if (World.isFree((int) x, (int) (y + gravity)) && !isJumping) {
-            isDown = true;
-            y += gravity;
+        if (jump) {
+            onJumping = true;
+            // TODO: Fix collision
             checkEnemyCollision();
-        } else {
-            isDown = false;
+        }
+
+        // REAL JUMP ALGORITHM
+        vspd += gravity;
+        if (!World.isFree((int) x, (int) (y + 1)) && jump) {
+            vspd = -6;
+            jump = false;
+        }
+
+        if (!World.isFree((int) x, (int) (y + vspd))) {
+            int signVsp;
+            if (vspd >= 0) {
+                signVsp = 1;
+            } else {
+                signVsp = -1;
+            }
+            while (World.isFree((int) x, (int) (y + signVsp))) {
+                y = y + signVsp;
+            }
+            vspd = 0;
+        }
+
+        y += vspd;
+        // END
+
+        if (!World.isFree(getX(), (int) (y + 2))) {
+            onJumping = false;
         }
 
         if (right && World.isFree((int) (getX() + speed), getY())) {
             moved = true;
-            if (isJumping || isDown) {
-                x += (speed + 0.5);
-            } else {
-                x += speed;
-            }
+            x += speed;
             dir = 1;
         } else if (left && World.isFree((int) (getX() - speed), getY())) {
             moved = true;
-            if (isJumping || isDown) {
-                x -= (speed + 0.5);
-            } else {
-                x -= speed;
-            }
+            x -= speed;
             dir = -1;
         }
 
@@ -90,34 +105,6 @@ public class Player extends Entity {
             }
         }
 
-        if (jump) {
-            if (!World.isFree(getX(), getY() + 5)) {
-                isJumping = true;
-                isDown = false;
-            } else {
-                jump = false;
-            }
-        }
-
-        if (isJumping) {
-            isDown = false;
-            if (World.isFree(getX(), getY() - 2)) {
-                y -= 2;
-                jumpFrames += 2;
-                if (jumpFrames == jumpHeight) {
-                    isJumping = false;
-                    isDown = true;
-                    jump = false;
-                    jumpFrames = 0;
-                }
-            } else {
-                isJumping = false;
-                isDown = true;
-                jumpFrames = 0;
-                jump = false;
-            }
-        }
-
         updateCamera();
     }
 
@@ -126,18 +113,17 @@ public class Player extends Entity {
             Entity e = Game.entities.get(i);
             if (e instanceof Enemy) {
                 if (Entity.isColidding(this, e)) {
-                    isJumping = true;
+                    jump = true;
                     ((Enemy) e).life--;
                 }
             }
         }
     }
 
-
     @Override
     public void render(Graphics g) {
         BufferedImage spriteSelected = dir == 1 ? rightPlayer[index] : leftPlayer[index];
-        if (isJumping || isDown) {
+        if (onJumping) {
             spriteSelected = dir == 1 ? Entity.PLAYER_SPRITE_JUMPING_RIGHT : Entity.PLAYER_SPRITE_JUMPING_LEFT;
         }
         g.drawImage(spriteSelected, getX() - Camera.x, getY() - Camera.y, null);
