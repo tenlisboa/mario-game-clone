@@ -11,7 +11,13 @@ public class Player extends Entity {
 
     public boolean right, left;
     private int dir = 1;
-    private double gravity = 2.2;
+
+    public double life = 100;
+
+    public int currentCoins = 0;
+    public int maxCoins = 0;
+
+    private double gravity = 2;
 
     private int frames, maxFrames = 7, index = 0, maxIndex = 2;
     private boolean moved = false;
@@ -42,6 +48,10 @@ public class Player extends Entity {
     public void tick() {
         depth = 1;
         moved = false;
+
+        if (life <= 0) {
+            World.restartGame("/level1.png");
+        }
 
         if (World.isFree((int) x, (int) (y + gravity)) && !isJumping) {
             isDown = true;

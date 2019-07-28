@@ -1,7 +1,9 @@
 package com.devthunder.world;
 
+import com.devthunder.entities.Coin;
 import com.devthunder.entities.Enemy;
 import com.devthunder.entities.Entity;
+import com.devthunder.entities.Player;
 import com.devthunder.main.Game;
 
 import javax.imageio.ImageIO;
@@ -40,6 +42,10 @@ public class World {
                     } else if (actualPixel == 0xFFff0000) { // Enemy
                         Enemy enemy = new Enemy(xx * Game.SPRITE_SIZE, yy * Game.SPRITE_SIZE, Game.SPRITE_SIZE, Game.SPRITE_SIZE, 0.7, Entity.ENEMY);
                         Game.entities.add(enemy);
+                    } else if (actualPixel == 0xFFfff300) {
+                        Coin coin = new Coin(xx * Game.SPRITE_SIZE, yy * Game.SPRITE_SIZE, Game.SPRITE_SIZE, Game.SPRITE_SIZE, 0, Entity.COIN);
+                        Game.entities.add(coin);
+                        Game.player.maxCoins++;
                     }
                 }
             }
@@ -69,7 +75,11 @@ public class World {
     }
 
     public static void restartGame(String level) {
-        // TODO: Reset game logic
+        Game.entities.clear();
+        Game.player = new Player(0, 0, Game.SPRITE_SIZE, Game.SPRITE_SIZE, 1, null);
+        Game.world = new World("/level1.png");
+
+        Game.entities.add(Game.player);
         return;
     }
 

@@ -50,5 +50,19 @@ public class Enemy extends Entity {
                 left = false;
             }
         }
+
+        checkPlayerCollision();
+    }
+
+    public void checkPlayerCollision() {
+        for (int i = 0; i < Game.entities.size(); i++) {
+            Entity e = Game.entities.get(i);
+            if (e instanceof Player) {
+                if (Entity.isColidding(this, e)) {
+                    if (Entity.rand.nextInt(100) < 30)
+                        Game.player.life--;
+                }
+            }
+        }
     }
 }

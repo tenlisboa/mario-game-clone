@@ -17,6 +17,7 @@ public class Entity {
     public static BufferedImage PLAYER_SPRITE_JUMPING_RIGHT = Game.spritesheet.getSprite(96, 0, Game.SPRITE_SIZE, Game.SPRITE_SIZE);
     public static BufferedImage PLAYER_SPRITE_JUMPING_LEFT = Game.spritesheet.getSprite(96, 16, Game.SPRITE_SIZE, Game.SPRITE_SIZE);
     public static BufferedImage ENEMY = Game.spritesheet.getSprite(32, 32, Game.SPRITE_SIZE, Game.SPRITE_SIZE);
+    public static BufferedImage COIN = Game.spritesheet.getSprite(0, 16, Game.SPRITE_SIZE, Game.SPRITE_SIZE);
 
     protected double x;
     protected double y;
