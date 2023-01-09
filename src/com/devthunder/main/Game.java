@@ -4,6 +4,7 @@ import com.devthunder.entities.Entity;
 import com.devthunder.entities.Player;
 import com.devthunder.graphics.Spritesheet;
 import com.devthunder.graphics.UI;
+import com.devthunder.helpers.Runner;
 import com.devthunder.world.World;
 
 import javax.swing.*;
@@ -11,16 +12,19 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener, MouseMotionListener {
 
+    private static Game instance;
+    @Serial
     private static final long serialVersionUID = 1L;
     public static JFrame frame;
+    public boolean isRunning = true;
     private Thread thread;
-    private boolean isRunning = true;
     public static final int WIDTH = 240;
     public static final int HEIGHT = 160;
     public static final int SCALE = 3;
@@ -54,6 +58,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         entities.add(player);
     }
 
+    public static Game getInstance() {
+        if (instance != null) {
+            instance = new Game();
+        }
+
+        return instance;
+    }
+
     public void initFrame() {
         frame = new JFrame("Super Mario");
         frame.add(this);
@@ -80,7 +92,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     }
 
     public static void main(String args[]) {
-        Game game = new Game();
+        Game game = Game.getInstance();
         game.start();
     }
 
@@ -119,31 +131,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
     @Override
     public void run() {
-        long lastTime = System.nanoTime();
-        double amountOfTicks = 60.0;
-        double ns = 1000000000 / amountOfTicks;
-        double delta = 0;
-        int frames = 0;
-        double timer = System.currentTimeMillis();
-        requestFocus();
-        while (isRunning) {
-            long now = System.nanoTime();
-            delta += (now - lastTime) / ns;
-            lastTime = now;
-            if (delta >= 1) {
-                tick();
-                render();
-                frames++;
-                delta--;
-            }
-
-            if (System.currentTimeMillis() - timer >= 1000) {
-                System.out.println("FPS: " + frames);
-                frames = 0;
-                timer += 1000;
-            }
-        }
-        stop();
+        Runner runner = new Runner();
+        runner.run();
     }
 
     @Override
@@ -155,6 +144,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
                 e.getKeyCode() == KeyEvent.VK_A) {
             player.left = true;
         }
+
+        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+            player.jump = true;
+        }
     }
 
     @Override
@@ -165,10 +158,6 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
         } else if (e.getKeyCode() == KeyEvent.VK_LEFT ||
                 e.getKeyCode() == KeyEvent.VK_A) {
             player.left = false;
-        }
-
-        if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-            player.jump = true;
         }
     }
 
