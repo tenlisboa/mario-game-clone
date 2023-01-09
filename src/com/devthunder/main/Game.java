@@ -59,7 +59,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
     }
 
     public static Game getInstance() {
-        if (instance != null) {
+        if (instance == null) {
             instance = new Game();
         }
 
