@@ -1,6 +1,7 @@
 package com.devthunder.entities;
 
 import com.devthunder.main.Game;
+import com.devthunder.main.Sound;
 import com.devthunder.world.World;
 
 import java.awt.image.BufferedImage;
@@ -60,6 +61,7 @@ public class Enemy extends Entity {
             if (e instanceof Player) {
                 if (Entity.isColidding(this, e)) {
                     if (Entity.rand.nextInt(100) < 30)
+                        Sound.hurtEffect.play();
                         Game.player.life--;
                 }
             }

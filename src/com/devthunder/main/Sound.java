@@ -1,17 +1,20 @@
 package com.devthunder.main;
 
-import java.applet.Applet;
-import java.applet.AudioClip;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class Sound {
 
-    private AudioClip clip;
+    private Clip clip;
 
     public static final Sound hurtEffect = new Sound("/hurt.wav");
 
     private Sound(String name) {
         try {
-            clip = Applet.newAudioClip(Sound.class.getResource(name));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(Sound.class.getResourceAsStream(name));
+            clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
         }catch(Throwable e) {}
     }
 
@@ -19,17 +22,18 @@ public class Sound {
         try {
             new Thread() {
                 public void run() {
-                    clip.play();
+                    System.out.println("Played");
+                    clip.start();
                 }
             }.start();
         }catch(Throwable e) {}
     }
 
-    public void loop() {
+    public void loop(int times) {
         try {
             new Thread() {
                 public void run() {
-                    clip.loop();
+                    clip.loop(times);
                 }
             }.start();
         }catch(Throwable e) {}

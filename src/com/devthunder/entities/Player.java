@@ -18,7 +18,7 @@ public class Player extends Entity {
     public int maxCoins = 0;
 
     private double gravity = 0.3;
-    private double vspd = 0;
+    private double verticalSpeed = 0;
 
     private int frames, maxFrames = 7, index = 0, maxIndex = 2;
     private boolean moved = false;
@@ -48,9 +48,7 @@ public class Player extends Entity {
         depth = 2;
         moved = false;
 
-        if (life <= 0) {
-            World.restartGame("/level1.png");
-        }
+        restartWorldIfLifeIsEmpty();
 
         if (jump) {
             onJumping = true;
@@ -60,15 +58,12 @@ public class Player extends Entity {
         checkEnemyCollision();
 
         // REAL JUMP ALGORITHM
-        vspd += gravity;
-        if ((!World.isFree((int) x, (int) (y + 1)) || takeDamageOnEnemy) && jump) {
-            vspd = -6;
-            jump = false;
-        }
+        verticalSpeed += gravity;
+        applyingGravityLaw();
 
-        if (!World.isFree((int) x, (int) (y + vspd))) {
+        if (!World.isFree((int) x, (int) (y + verticalSpeed))) {
             int signVsp;
-            if (vspd >= 0) {
+            if (verticalSpeed >= 0) {
                 signVsp = 1;
             } else {
                 signVsp = -1;
@@ -76,10 +71,10 @@ public class Player extends Entity {
             while (World.isFree((int) x, (int) (y + signVsp))) {
                 y = y + signVsp;
             }
-            vspd = 0;
+            verticalSpeed = 0;
         }
 
-        y += vspd;
+        y += verticalSpeed;
         // END
 
         if (!World.isFree(getX(), (int) (y + 2))) {
@@ -108,6 +103,23 @@ public class Player extends Entity {
         }
 
         updateCamera();
+    }
+
+    private void applyingGravityLaw() {
+        if (isHittingTheRoof() && onJumping) {
+            verticalSpeed = -6;
+            jump = false;
+        }
+    }
+
+    private boolean isHittingTheRoof() {
+        return !World.isFree((int) x, (int) (y + 1));
+    }
+
+    private void restartWorldIfLifeIsEmpty() {
+        if (life <= 0) {
+            World.restartGame("/level1.png");
+        }
     }
 
     public void checkEnemyCollision() {
